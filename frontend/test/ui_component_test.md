@@ -100,8 +100,22 @@ import "@testing-library/jest-dom";
 
 ## 暗黙的なロール
 
-💡 Testing Library では **「暗黙的なロール」** も含めたクエリーを優先して使うことも推奨されている。
+💡 Testing Library では **「暗黙的なロール」** も含めたクエリーを優先して使うことも推奨されている。（詳しくは[MDN WAI-ARIA ロール](https://developer.mozilla.org/ja/docs/Web/Accessibility/ARIA/Roles)で確認）
 
+- **暗黙的なロール** とは、`<button>`や`<input>`などの HTML の要素が初期値として持つロールのこと。
+- Role は、Web 技術標準化を定めている`W3C`の`WAI-ARIA`仕様に準拠している。
+- 要素とロールは 1 対他の関係にある
+  - ex) `input`タグは`type`属性に応じて、以下のようなロールを持つ
+  - ```html
+    <input type="text" />
+    <!-- ロール: textbox -->
+    <input type="checkbox" />
+    <!-- ロール: checkbox -->
+    <input type="radio" />
+    <!-- ロール: radio -->
+    <input type="number" />
+    <!-- ロール: spinbutton -->
+    ```
 - 例えば、以下では`getByRole("heading")`とすることで、見出しである h1~h6 タグを持つ要素を取得している。
 
 ```ts
@@ -109,6 +123,52 @@ test("見出しの表示", () => {
   render(<Form name="taro" />);
   expect(screen.getByRole("heading")).toHaveTextContent("アカウント情報");
 });
+```
+
+## アクセシブルネームを使った絞り込み
+
+- アクセシブルネームとは、支援技術(スクリーンリーダーなどのアクセシビリティに関する支援)が認識するノードの名称。
+  - スクリーンリーダーでは、コントロールの機能を端的に説明するために、アクセシブルネームを読み上げる。
+    - ex) button 要素に「送信」という文字が書かれている -> 「送信」ボタンとして読み上げる
+    - 逆に言えば、アクセシブルネームがないと、スクリーンリーダーはコントロールの機能を認識できない。(読み上げがされなく、button 要素である以外の情報は得られない)
+- 以下の例だと、送信と書かれたボタン要素を取得している。
+
+```ts
+// <button>送信</button>
+getByRole("button", { name: "サインアップ" });
+```
+
+## ロールとアクセシビリティの確認
+
+- `testing-library`の`logRoles`関数を使うと、レンダリングされた要素のロールとアクセシビリティを確認できる。
+- 以下は、サンプルのテストコードと、実行例
+- `Form`コンポーネントのレンダリング結果から、`heading`と`button`のロールとアクセシビリティを確認できる。
+  - `heading`がロール、`Name`がアクセシビリティネーム
+
+```ts
+test("logRoles: レンダリング結果からロール・アクセシブルネームを確認", () => {
+  const { container } = render(<Form name="taro" />);
+  logRoles(container);
+});
+```
+
+```shell
+# 実行結果の例
+console.log
+  heading:
+
+  Name "アカウント情報":
+  <h2 />
+
+  --------------------------------------------------
+  button:
+
+  Name "編集する":
+  <button />
+
+  --------------------------------------------------
+
+    at logRoles (node_modules/@testing-library/dom/dist/role-helpers.js:207:20)
 ```
 
 ## イベントハンドラー呼び出し
@@ -288,6 +348,7 @@ function mockHandleSubmit() {
 ```
 
 ### 使用例
+
 ```ts
 test("入力・送信すると、入力内容が送信される", async () => {
   const [mockFn, onSubmit] = mockHandleSubmit();
@@ -305,11 +366,12 @@ test("入力・送信すると、入力内容が送信される", async () => {
 });
 ```
 
-## UIコンポーネントのスナップショット
-- スナップショットテストは、 **コミット済みの`.snap`ファイルと、現在のUIコンポーネントのスナップショットを比較** する
-- `toMatchSnapshot`を使うと、UIコンポーネントのスナップショットをテストできる
+## UI コンポーネントのスナップショット
+
+- スナップショットテストは、 **コミット済みの`.snap`ファイルと、現在の UI コンポーネントのスナップショットを比較** する
+- `toMatchSnapshot`を使うと、UI コンポーネントのスナップショットをテストできる
 - テストを実行すると、同階層に`__snapshots__`ディレクトリが作成され、スナップショットが保存される
-- スナップショットには、HTML文字列化されたUIコンポーネントが保存されている
+- スナップショットには、HTML 文字列化された UI コンポーネントが保存されている
 - `npx jest --updateSnapshot`でスナップショットを更新できる
 
 ```ts
@@ -321,4 +383,5 @@ test("Snapshot: 登録フォームが表示される", async () => {
 ```
 
 # 実務でも使えそうなテスト例
-- [非同期処理を含むUIコンポーネントテストのテスト例](https://github.com/frontend-testing-book/unittest/tree/main/src/05/07)
+
+- [非同期処理を含む UI コンポーネントテストのテスト例](https://github.com/frontend-testing-book/unittest/tree/main/src/05/07)
