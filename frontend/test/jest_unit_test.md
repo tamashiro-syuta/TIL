@@ -40,17 +40,12 @@ describe("add", () => {
 ```
 
 - Error クラスを拡張する場合は、`instanceof`演算子を使えば、どのエラーをテストするかを指定できる
-
-  - ```typescript
+  ```typescript
     if (err instanceof RangeError) {
       /* 捉えた例外がRangeErrorインスタンスの場合 */
     }
-    ```
-
   ```
   - ⚠️ 拡張もとのクラスを指定するとテストが成功してしまい、意図したエラーか判別できないので注意(例外の握りつぶし)
-
-  ```
 
 - [よく使われる matcher 一覧](https://jestjs.io/ja/docs/using-matchers)
 
