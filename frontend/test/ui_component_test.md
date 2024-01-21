@@ -305,5 +305,20 @@ test("入力・送信すると、入力内容が送信される", async () => {
 });
 ```
 
+## UIコンポーネントのスナップショット
+- スナップショットテストは、 **コミット済みの`.snap`ファイルと、現在のUIコンポーネントのスナップショットを比較** する
+- `toMatchSnapshot`を使うと、UIコンポーネントのスナップショットをテストできる
+- テストを実行すると、同階層に`__snapshots__`ディレクトリが作成され、スナップショットが保存される
+- スナップショットには、HTML文字列化されたUIコンポーネントが保存されている
+- `npx jest --updateSnapshot`でスナップショットを更新できる
+
+```ts
+test("Snapshot: 登録フォームが表示される", async () => {
+  mockPostMyAddress();
+  const { container } = render(<RegisterAddress />);
+  expect(container).toMatchSnapshot();
+});
+```
+
 # 実務でも使えそうなテスト例
 - [非同期処理を含むUIコンポーネントテストのテスト例](https://github.com/frontend-testing-book/unittest/tree/main/src/05/07)
