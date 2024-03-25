@@ -269,6 +269,14 @@ RDBでは、以下の実行順でSQLを評価している。(※`ORDER BY`は最
 - **ページネーションの実装で「次のページ」として渡すのは、OFFSETの値より最後に表示されたIDにした方が早くなる**
   - **OFFSETはINDEXが貼られていなく、IDには貼られているから**
 
+## Tips
+Railsは遅延評価と言って、ActiveRecordのオブジェクト生成時にはSQLは発行されず、実際にデータが必要になったタイミングで、最適なSQLが発行される
+つまり、`limit()`や`where()`の順番は違ってもActiveRecord側でいい感じに最適化してくれる
+
+### 参考資料
+- [SmartHR: Active Recordともっと仲良くなって自然に優しいコードを書くぞ](https://tech.smarthr.jp/entry/2021/11/11/151444)
+- [Zenn: 【Rails】ActiveRecordはどのタイミングで実際にクエリを実行しているのか。SQLキャッシュについて。](https://zenn.dev/nakamura_fumiya/articles/c3ebcbe66a70b6)
+
 ## 感想
 > ページネーションの実装で「次のページ」として渡すのは、OFFSETの値より最後に表示されたIDにした方が早くなる
 
