@@ -1,4 +1,4 @@
-# A Tour Of Go の Basic のメモ
+# A Tour Of Go の Packages, variables, and functions のメモ
 リンク : https://go-tour-jp.appspot.com/basics
 
 

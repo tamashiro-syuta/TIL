@@ -1,4 +1,4 @@
-# A Tour Of Go の Basic のメモ
+# A Tour Of Go の Flow control statements のメモ
 リンク : https://go-tour-jp.appspot.com/basics
 
 ## for 文
