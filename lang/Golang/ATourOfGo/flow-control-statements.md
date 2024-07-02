@@ -1,5 +1,5 @@
 # A Tour Of Go の Flow control statements のメモ
-リンク : https://go-tour-jp.appspot.com/basics
+リンク : https://go-tour-jp.appspot.com/flowcontrol
 
 ## for 文
 > 基本的に、 for ループはセミコロン ; で3つの部分に分かれています:
