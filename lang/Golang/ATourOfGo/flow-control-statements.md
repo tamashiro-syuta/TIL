@@ -149,6 +149,43 @@ func main() {
 	have (int, error)
 	want ()
 	```
+- こういうのもできる
+	```go
+	package main
+
+	import "fmt"
+
+	// 関数を返す関数を定義
+	func createFunctions() (func(), func()) {
+		defer fmt.Println("world")
+
+		// LIFO順に呼び出される関数を定義
+		firstFunc := func() {
+			fmt.Println("first")
+		}
+		secondFunc := func() {
+			fmt.Println("second")
+		}
+
+		fmt.Println("hello")
+
+		return firstFunc, secondFunc
+	}
+
+	func main() {
+		first, second := createFunctions()
+
+		defer second()
+		defer first()
+	}
+
+	// NOTE: 出力結果
+	// hello
+	// world
+	// first
+	// second
+	```
+
 
 ```go
 package main
@@ -167,7 +204,7 @@ func main() {
 
 - `defer`へ渡した関数が複数ある場合は、その呼び出しはスタックされます。
 - 呼び出し元の関数がreturnする時、`defer`へ渡した関数は`LIFO(last-in-first-out)`の順番で実行されます
-  - LIFO : 後入れ先出し
+  - LIFO : 後入れ先出し(最後に入れたやつから実行するね)
 
 ```go
 package main
