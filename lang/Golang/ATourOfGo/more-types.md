@@ -320,8 +320,14 @@ var pow = []int{1, 2, 4, 8, 16, 32, 64, 128}
 func main() {
 	for i, v := range pow {
 		fmt.Printf("2**%d = %d\n", i, v)
+
+		// NOTE: rangeで取得できるvalue(変数v)はコピーなので、元の配列には影響を与えない
+		v = 1
 	}
+
+	fmt.Printf("%v\n", pow)
 }
+
 
 // NOTE: 出力結果
 // 2**0 = 1
@@ -332,6 +338,7 @@ func main() {
 // 2**5 = 32
 // 2**6 = 64
 // 2**7 = 128
+// [1 2 4 8 16 32 64 128] ← rangeで取得できるvalue(変数v)はコピーなので、元の配列には影響を与えない
 ```
 
 ## Map
