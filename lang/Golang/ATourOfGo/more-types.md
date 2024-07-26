@@ -256,6 +256,12 @@ func printSlice(s string, x []int) {
 	fmt.Printf("%s len=%d cap=%d %v\n",
 		s, len(x), cap(x), x)
 }
+
+// NOTE: 出力結果
+// a len=5 cap=5 [0 0 0 0 0]
+// b len=0 cap=5 []
+// c len=2 cap=5 [0 0]
+// d len=3 cap=3 [0 0 0]
 ```
 
 - 組み込みの`append`関数でスライスに値を追加できる
@@ -399,3 +405,96 @@ func main() {
 		- ex) `elem, ok = m[key]`
 	- 更新 : `m[key] = elem`
 	- 削除 : `delete(m, key)`
+
+## Function values
+関数も変数です。他の変数のように関数を渡すことができます。
+
+関数値( function value )は、関数の引数に取ることもできますし、戻り値としても利用できます。
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+func compute(fn func(float64, float64) float64) float64 {
+	return fn(3, 4)
+}
+
+func main() {
+	hypot := func(x, y float64) float64 {
+		return math.Sqrt(x*x + y*y)
+	}
+	fmt.Println(hypot(5, 12))
+
+	fmt.Println(compute(hypot))
+
+	// NOTE: math.Powはべき乗を計算する関数 ex) math.Pow(3, 4) = 3の4条 = 81
+	fmt.Println(compute(math.Pow))
+}
+
+// NOTE: 出力結果
+// 13
+// 5
+// 81
+```
+### クロージャー
+Goの関数は クロージャ( closure ) です。 クロージャは、それ自身の外部から変数を参照する関数値です。 この関数は、参照された変数へアクセスして変えることができ、その意味では、その関数は変数へ"バインド"( bind )されています。
+
+例えば、 adder 関数はクロージャを返しています。 各クロージャは、それ自身の sum 変数へバインドされます。
+
+#### ポイント
+1. クロージャの作成
+	- adder関数は、内部でsumという変数を初期化し、匿名関数を返します。
+	- 匿名関数は、引数xを受け取り、sumに加算し、その結果を返します。
+2. クロージャのバインディング
+	- posとnegはそれぞれadder関数を呼び出し、異なるクロージャを作成します。
+	- **各クロージャは独自のsum変数にバインドされるため、独立して動作します。**
+	  - 同じ`sum`という変数だけど、クロージャーが異なるから別の値として認識されるんだぜってこと
+3. クロージャの使用
+	- main関数内のループで、posは0から9までの値を加算し、negは0, -2, -4, ... と減算します。
+	- 各クロージャは独自の状態を保持し、バインドされたsum変数を変更します。
+
+#### クロージャの活用
+- クロージャは、状態を保持する関数を作成する際に便利です。例えば、カウンタや累積値を計算する関数を簡潔に作成できます。
+
+```go
+package main
+
+import "fmt"
+
+// NOTE: adder自体がクロージャーではなく
+func adder() func(int) int {
+	sum := 0
+
+	// NOTE: 返り値のこいつがクロージャー(外部の変数sumを参照しているため)
+	return func(x int) int {
+		sum += x
+		return sum
+	}
+}
+
+func main() {
+	pos, neg := adder(), adder()
+	for i := 0; i < 10; i++ {
+		fmt.Println(
+			pos(i),
+			neg(-2*i),
+		)
+	}
+}
+​
+// NOTE: 出力結果
+// 0 0
+// 1 -2
+// 3 -6
+// 6 -12
+// 10 -20
+// 15 -30
+// 21 -42
+// 28 -56
+// 36 -72
+// 45 -90
+```
