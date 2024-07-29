@@ -442,3 +442,297 @@ func describe(i interface{}) {
 // (42, int)
 // (hello, string)
 ```
+
+***
+
+## Type assertions
+型アサーション は、インターフェースの値の基になる具体的な値を利用する手段を提供します。
+
+この文は、インターフェースの値 i が具体的な型 T を保持し、基になる T の値を変数 t に代入することを主張します。
+
+i が T を保持していない場合、この文は panic(例外) を引き起こします。
+
+インターフェースの値が特定の型を保持しているかどうかを テスト するために、型アサーションは2つの値(基になる値とアサーションが成功したかどうかを報告するブール値)を返すことができます。
+
+i が T を保持していれば、 t は基になる値になり、 ok は真(true)になります。
+
+そうでなければ、 ok は偽(false)になり、 t は型 T のゼロ値になり panic は起きません。
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var i interface{} = "hello"
+
+	s := i.(string)
+	fmt.Println(s)
+
+	s, ok := i.(string)
+	fmt.Println(s, ok)
+
+	f, ok := i.(float64)
+	fmt.Println(f, ok)
+
+	f = i.(float64) // panic
+	fmt.Println(f)
+}
+
+
+package main
+
+import "fmt"
+
+func main() {
+	var i interface{} = "hello"
+
+	s := i.(string)
+	fmt.Println(s)
+
+	s, ok := i.(string)
+	fmt.Println(s, ok)
+
+	f, ok := i.(float64) // NOTE: アサーションに失敗するが、okで結果(false)を受け取っているので、panic(例外)は起きない
+	fmt.Println(f, ok)
+
+	f = i.(float64) // NOTE: アサーションに失敗したので、panic(例外)が起きる
+	fmt.Println(f)
+}
+​
+// NOTE: 出力結果
+// hello
+// hello true
+// 0 false
+// panic: interface conversion: interface {} is string, not float64 (エラー)
+```
+
+***
+
+## Type switches
+型switch はいくつかの型アサーションを直列に使用できる構造です。
+
+型switchは通常のswitch文と似ていますが、型switchのcaseは型(値ではない)を指定し、それらの値は指定されたインターフェースの値が保持する値の型と比較されます。
+
+```go
+package main
+
+import "fmt"
+
+func do(i interface{}) {
+	switch v := i.(type) {
+	case int:
+		fmt.Printf("Twice %v is %v\n", v, v*2)
+	case string:
+		fmt.Printf("%q is %v bytes long\n", v, len(v))
+	default:
+		fmt.Printf("I don't know about type %T!\n", v)
+	}
+}
+
+func main() {
+	do(21)
+	do("hello")
+	do(true)
+}
+
+// NOTE: 出力結果
+// Twice 21 is 42
+// "hello" is 5 bytes long
+// I don't know about type bool!
+```
+
+***
+
+## Stringers
+もっともよく使われているinterfaceの一つに fmt パッケージ に定義されている Stringer があります
+
+```go
+type Stringer interface {
+    String() string
+}
+```
+
+Stringer インタフェースは、stringとして表現することができる型です。 fmt パッケージ(と、多くのパッケージ)では、変数を文字列で出力するためにこのインタフェースがあることを確認します。
+
+```go
+package main
+
+import "fmt"
+
+type Person struct {
+	Name string
+	Age  int
+}
+
+// NOTE: Person型はStringerインターフェイスを実装している = fmt.Println()を実行できる。
+func (p Person) String() string {
+	return fmt.Sprintf("%v (%v years)", p.Name, p.Age)
+}
+
+func main() {
+	a := Person{"Arthur Dent", 42}
+	z := Person{"Zaphod Beeblebrox", 9001}
+
+	// NOTE: fmt.Println関数は、インターフェースfmtに実装されているが、
+	// NOTE: その中身では、対象のオブジェクトがインターフェースStringerを実装しているかを検証している
+	fmt.Println(a, z)
+}
+
+// NOTE: 出力結果
+// Arthur Dent (42 years) Zaphod Beeblebrox (9001 years)
+```
+
+***
+
+## Errors
+Goのプログラムは、エラーの状態を error 値で表現します。
+
+error 型は fmt.Stringer に似た組み込みのインタフェースです
+
+```go
+type error interface {
+    Error() string
+}
+```
+
+よく、関数は error 変数を返します。そして、呼び出し元はエラーが nil かどうかを確認することでエラーをハンドル(取り扱い)します。
+
+nil の error は成功したことを示し、 nilではない error は失敗したことを示します。
+```go
+i, err := strconv.Atoi("42")
+if err != nil {
+    fmt.Printf("couldn't convert number: %v\n", err)
+    return
+}
+fmt.Println("Converted integer:", i)
+```
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+// NOTE: カスタムエラーを定義
+type MyError struct {
+	// NOTE: エラーが発生した時間
+	When time.Time
+	// NOTE: エラーの内容
+	What string
+}
+// NOTE: MyError型はErrorメソッドを実装することでerrorインターフェースを実装している
+// NOTE: ※ errorインターフェースはError() stringメソッドを持つインターフェース
+func (e *MyError) Error() string {
+	return fmt.Sprintf("at %v, %s",
+		e.When, e.What)
+}
+
+// NOTE: カスタムエラーを返す関数
+func run() error {
+	return &MyError{
+		time.Now(),
+		"it didn't work",
+	}
+}
+
+func main() {
+	// NOTE: err には、run関数から返されたMyError型のポインタが代入される = ポインタが返されるので、nilチェックがが可能
+	if err := run(); err != nil {
+		fmt.Println(err)
+	}
+}
+
+// NOTE: 出力結果
+// at 2009-11-10 23:00:00 +0000 UTC m=+0.000000001, it didn't work
+```
+
+***
+
+## Readers
+io パッケージは、データストリームを読むことを表現する io.Reader インタフェースを規定しています。
+
+Goの標準ライブラリには、ファイル、ネットワーク接続、圧縮、暗号化などで、このインタフェースの 多くの実装 があります。
+
+io.Reader インタフェースは Read メソッドを持ちます
+
+```go
+func (T) Read(b []byte) (n int, err error)
+```
+
+Read は、データを与えられたバイトスライスへ入れ、入れたバイトのサイズとエラーの値を返します。 ストリームの終端は、 io.EOF のエラーで返します。
+
+例のコードは、 strings.Reader を作成し、 8 byte毎に読み出しています。
+
+```go
+package main
+
+import (
+	"fmt"
+	"io"
+	"strings"
+)
+
+func main() {
+	r := strings.NewReader("Hello, Reader!")
+
+	b := make([]byte, 8)
+	for {
+		n, err := r.Read(b)
+		fmt.Printf("n = %v err = %v b = %v\n", n, err, b)
+		fmt.Printf("b[:n] = %q\n", b[:n])
+		if err == io.EOF {
+			break
+		}
+	}
+}
+
+// NOTE: 出力結果
+// n = 8 err = <nil> b = [72 101 108 108 111 44 32 82]
+// b[:n] = "Hello, R"
+// n = 6 err = <nil> b = [101 97 100 101 114 33 32 82]
+// b[:n] = "eader!"
+// n = 0 err = EOF b = [101 97 100 101 114 33 32 82]
+// b[:n] = ""
+```
+
+***
+
+## Images
+image パッケージは、以下の Image インタフェースを定義しています：
+
+```go
+package image
+
+type Image interface {
+    ColorModel() color.Model
+    Bounds() Rectangle
+    At(x, y int) color.Color
+}
+```
+
+Note: Bounds メソッドの戻り値である Rectangle は、 image パッケージの image.Rectangle に定義があります。
+(詳細は、 [このドキュメント](https://golang.org/pkg/image/#Image) を参照してください。)
+
+color.Color と color.Model は共にインタフェースですが、定義済みの color.RGBA と color.RGBAModel を使うことで、このインタフェースを無視できます。 これらのインタフェースは、image/color パッケージで定義されています。
+
+```go
+package main
+
+import (
+	"fmt"
+	"image"
+)
+
+func main() {
+	m := image.NewRGBA(image.Rect(0, 0, 100, 100))
+	fmt.Println(m.Bounds())
+	fmt.Println(m.At(0, 0).RGBA())
+}
+
+// NOTE: 出力結果
+// (0,0)-(100,100)
+// 0 0 0 0
+```
