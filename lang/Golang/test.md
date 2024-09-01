@@ -1,10 +1,6 @@
----
-title: "MUIでメールリンクを作成する方法"
-emoji: "📩"
-type: "tech" # tech: 技術記事 / idea: アイデア
-topics: [mui,react]
-published: true
----
+:::message
+メッセージをここに
+:::
 
 muiでメールのリンクを作る方法がわからなかったので、調べてみた。
 以外と簡単だったので、メモしておく。
