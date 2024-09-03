@@ -46,3 +46,141 @@
     fmt.Println(c, lastNum) // [1, 2, 3, 4, 5] 5
     ```
   - この方法で作成したスライスは、元のスライスとはメモリを共有していないので、元のスライスの値が変わっても影響を受けない
+
+## 文字列、rune、バイト
+- 文字列を表現するのにバイト列が使われている
+- 1バイトより大きい文字を含む場合は、スライスやインデックスは使わない方が良い
+  - 1バイトより大きい文字は複数のバイトで表現されるため、スライスやインデックスでアクセスすると、文字が壊れてしまう可能性がある
+  - ex) `fmt.Println(s2)`で文字化けが起きる
+    ```go
+    var s string = "Hello ☀"
+		var s2 string = s[4:7]
+		var s3 string = s[:5]
+		var s4 string = s[6:]
+		fmt.Println(s)  // Hello ☀
+		fmt.Println(s2) // o ?（文字化け）
+		fmt.Println(s3) // Hello
+		fmt.Println(s4) // ☀
+		fmt.Println("len(s):", len(s))
+    ```
+- 初学者がやりがちなミス
+  - Int型を文字列に変換する際、stringでキャストしてしまう
+    - `strconv`というライブラリの`Itoa`関数を使うと、正しく変換できる
+    - `strconv.Itoa(42)` ← これで`"42"`という文字列に変換できる
+    - `go vet`コマンドを実行すると、整数型から文字列型への変換は警告の対象になっている
+    - 文字列の型変換はバイトのスライスとの間で行われることが多く、runeのスライスとの間で行われることは一般的ではない
+
+## map
+- mapは、キーと値のペアを持つデータ構造(辞書型的なやつ)
+- 注意点
+  - nilマップに対して書き込みを行うとpanicになる(読み込みはOK)
+    - nilマップ = `var m map[int]string`のように宣言しただけのマップのこと
+    - 通常、このような宣言の仕方はしない
+  - `:=`を使った"マップリテラル"という宣言方法だと、nilマップにならない
+    - `m := map[int]string{}`のように宣言すると、空のマップが作成される
+    - マップのサイズも0だが、読み書きの両方が可能(panicにならない！！)
+  - マップのサイズが予想できる際は、サイズを指定してmake関数で作成
+- 値が設定されていないキーにアクセスすると、ゼロ値が返る
+- "カンマokイディオム"を使って、アクセスした値が存在するかどうかを判定することができる
+  - `v, ok := m[key]`
+  - `ok`には、キーが存在するかどうかが格納される
+  - `v === ゼロ値` かつ `ok === true` → 存在する(意図的にゼロ値を設定している)
+  - `v === ゼロ値` かつ `ok === false` → 存在しない(ただゼロ値が返ってきただけ)
+
+## 構造体
+- 構造体の定義は、関数の外側でも内側でも可能
+  - ただし、内側で定義した場合は、そのパッケージ内でのみアクセス可能
+- 構造体リテラルでは、全てのフィールドがゼロ値で初期化される
+  ```go
+  type Person struct {
+    Name string
+    Age  int
+  }
+
+  p := Person{}
+  fmt.Println(p.Name) // ""
+  fmt.Println(p.Age)  // 0
+  ```
+- 構造体は、中身が完全に同じでも異なる構造体のインスタンスは比較できない
+  - 比較したい場合は自作で比較関数を作成する必要がある
+  ```go
+  type FirstPerson struct {
+		name string
+		age  int
+	}
+	type SecondPerson struct {
+		name string
+		age  int
+	}
+
+	p1 := FirstPerson{
+		name: "1",
+		age:  1,
+	}
+
+	p2 := SecondPerson{
+		name: "1",
+		age:  1,
+	}
+
+	fmt.Println(p1 == p2) // エラー
+  ```
+- "無名構造体"を使って、一時的な構造体を作成することができる
+  ```go
+  p := struct {
+    Name string
+    Age  int
+  }{
+    Name: "Taro",
+    Age:  20,
+  }
+  fmt.Println(p) // {Taro 20}
+  ```
+  - JavaScriptのアロー関数に似てるけど、以下のように無名構造体に名前をつけることはできない
+    ```go
+    func main() {
+      // NOTE: ここで、そんなことはできんぞって怒られる
+      p := struct {
+        Name string
+        Age  int
+      }
+
+      q := p{
+        Name: "Taro",
+        Age:  20,
+      }
+      fmt.Println(p)
+      fmt.Println(q)
+    }
+    ```
+  - 無名構造体が利用されるケース
+    - 外部データの変換(特にJSON周り)
+    - テストコード
+- 無名構造の場合、中身が同じであれば比較が可能
+  ```go
+  type FirstPerson struct {
+		name string
+		age  int
+	}
+	type SecondPerson struct {
+		name string
+		age  int
+	}
+	type ThirdPerson struct {
+		name string
+		age  int
+	}
+
+	p1 := FirstPerson{
+		name: "1",
+		age:  1,
+	}
+
+	var p2 struct {
+		name string
+		age  int
+	}
+
+	p2 = p1
+	fmt.Println(p1 == p2) // true
+  ```
