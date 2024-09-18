@@ -257,7 +257,6 @@ tag: "アーキテクチャ"
 
 ## モデル変換の戦略まとめ
 ### モデルを変換しない
-![モデルを変換しない](/image/architecture/clean_architecture_handson/no_change.jpg)
 - メリット
   - 変換する処理が必要ないので、実装が楽
 - デメリット
