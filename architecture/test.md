@@ -3,4 +3,4 @@ title: "「手を動かしてわかるクリーンアーキテクチャ」のメ
 tag: "アーキテクチャ"
 ---
 
-![ほげ](/image/あーきてくちゃ/clean_architecture_handson/clean_architecture.jpg)
+![ほげ](/image/architecture/あ/い.jpg)
