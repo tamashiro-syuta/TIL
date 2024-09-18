@@ -15,4 +15,3 @@ tag: "AI"
       - 『ベンタの機能差と価格(インフラも含めた)を考慮して選ぼう』
         - コンテンツフィルター
         - function-calling
-![clean_architecture](/image/architecture/clean_architecture_handson/clean_architecture.jpg)
