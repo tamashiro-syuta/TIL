@@ -52,7 +52,7 @@ tag: "アーキテクチャ"
     4. ドメイン層と永続化層が密結合になる
         - ドメイン層のコードに影響を与えずに永続化層のコードを変更するのが難しくなる
 
-  ![従来の多層アーキテクチャ](/image/architecture/clean_architecture_handson/orm_with_mvc_architecture.jpg)
+  ![従来の多層アーキテクチャ](/image/architecture/klean_architecture_handson/orm_with_mvc_architecture.jpg)
 
 ***
 
@@ -80,6 +80,7 @@ tag: "アーキテクチャ"
   - そうすることで、層単位で見た時に外側の層が内側の層に依存するようになる
 
 ## クリーンアーキテクチャの各層の概要
+![klean_architecture](/image/architecture/klean_architecture_handson/klean_architecture.jpg)
 
 ### 🟨 エンタープライズビジネスルール層(図の黄色)
 - エンティティ
@@ -256,6 +257,7 @@ tag: "アーキテクチャ"
 
 ## モデル変換の戦略まとめ
 ### モデルを変換しない
+![モデルを変換しない](/image/architecture/klean_architecture_handson/no_change.jpg)
 - メリット
   - 変換する処理が必要ないので、実装が楽
 - デメリット
@@ -264,7 +266,7 @@ tag: "アーキテクチャ"
   - CRUD処理などのシンプルな処理でユースケースが複雑ではない場合
 
 ### 双方向でのモデルの変換
-![双方向でのモデルの変換](/image/architecture/clean_architecture_handson/khange_each_other.jpg)
+![双方向でのモデルの変換](/image/architecture/klean_architecture_handson/khange_each_other.jpg)
 - 核となるモデルを元に、アプリケーションの外側に専用のモデル作成し変換する
 - メリット
   - 核となるモデルのデータが変更されない限り、各層のモデルには影響がない(単一責任の原則)
@@ -275,7 +277,7 @@ tag: "アーキテクチャ"
     - アダプタがアプリケーションの核と密結合になる
 
 ### 徹底的なモデルの変換
-![徹底的なモデルの変換](/image/architecture/clean_architecture_handson/khange_in_depth.jpg)
+![徹底的なモデルの変換](/image/architecture/klean_architecture_handson/khange_in_depth.jpg)
 - 各層ごとにモデルを変換する
 - メリット
   - 各層ごとにモデルができるため、必要最低限の過不足ないデータのみを持つモデルを作成できる
@@ -285,7 +287,7 @@ tag: "アーキテクチャ"
     - 本来解決したいドメインの課題ではなく、モデルの変換にコストがかかる
 
 ### 一方向でのモデルの変換
-![一方向でのモデルの変換](/image/architecture/clean_architecture_handson/khange_one_direction.jpg)
+![一方向でのモデルの変換](/image/architecture/klean_architecture_handson/khange_one_direction.jpg)
 - 核となるモデル、アプリケーションの外側に作成するモデルの全てが一つのインテーフェーを実装するようにする
   - 実装するインターフェースは、モデルの状態を取得する`Getter`メソッドのみが定義されたもの
   - 各モデルはこのインターフェースを実装しているので、さらにメソッド等を加えて自身のモデルに変換するか、そのまま利用するかを決めることができる
