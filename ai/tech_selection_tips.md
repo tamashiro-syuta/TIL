@@ -15,4 +15,3 @@ tag: "AI"
       - 『ベンタの機能差と価格(インフラも含めた)を考慮して選ぼう』
         - コンテンツフィルター
         - function-calling
-![従来の多層アーキテクチャ](/image/architecture/clean_architecture_handson/orm_with_mvc_architecture.jpg)
