@@ -3,4 +3,4 @@ title: "「手を動かしてわかるクリーンアーキテクチャ」のメ
 tag: "アーキテクチャ"
 ---
 
-![従来の多層アーキテクチャ](/image/architecture/clean_architecture_handson/orm_with_mvc_architecture.jpg)
+![ほげ](/image/architecture/clean_architecture_handson/clean_architecture.jpg)
