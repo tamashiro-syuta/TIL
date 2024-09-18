@@ -1,3 +1,8 @@
+---
+title: "Effective DevOps"
+tags: ["devops", "書籍"]
+---
+
 # Effective DevOps
 ## 読む前の知識
 - DevOps = CI/CDとかdockerとかで開発しやすい環境を整えること

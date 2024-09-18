@@ -1,3 +1,8 @@
+---
+title: "フロントエンドの技術選定 ~2023を振り返る~ Lunch LT"
+tags: ["フロントエンド", "技術選定", "イベント"]
+---
+
 # フロントエンドの技術選定 ~2023を振り返る~ Lunch LT
 - Connpassリンク
   - https://findy.connpass.com/event/306714/

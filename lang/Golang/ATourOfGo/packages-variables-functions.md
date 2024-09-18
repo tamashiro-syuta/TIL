@@ -1,3 +1,7 @@
+---
+title: "A Tour Of Go の  Packages, variables, and functions"
+tags: ["Go"]
+---
 # A Tour Of Go の Packages, variables, and functions のメモ
 リンク : https://go-tour-jp.appspot.com/basics
 

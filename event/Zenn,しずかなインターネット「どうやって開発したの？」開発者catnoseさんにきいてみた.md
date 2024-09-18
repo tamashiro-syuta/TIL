@@ -1,3 +1,8 @@
+---
+title: "Zenn,しずかなインターネット「どうやって開発したの？」開発者catnoseさんにきいてみた"
+tags: ["イベント", "個人開発"]
+---
+
 # Zenn,しずかなインターネット「どうやって開発したの？」開発者catnoseさんにきいてみた
 - Connpassリンク
   - https://findy.connpass.com/event/306774/

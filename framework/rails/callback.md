@@ -1,3 +1,8 @@
+---
+title: "コールバック周りのTips"
+tags: ["Rails", "Tips"]
+---
+
 # コールバック周りのTips
 
 ## `skip_〇〇_action`

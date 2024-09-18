@@ -1,3 +1,8 @@
+---
+title: "MUI の Stepper で Server Actions を実行する際の注意点"
+tags: ["MUI", "Nextjs", "Tips"]
+---
+
 # 🚨 MUI の Stepper で Server Actions を実行する際の注意点
 
 mui の stepper では、active ではない step のコンポーネントはレンダリングされないため、`FormData`の値として判別できない。

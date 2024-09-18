@@ -1,3 +1,8 @@
+---
+title: "意外と知らない TypeScript の型"
+tags: ["TypeScript"]
+---
+
 # 意外と知らない TypeScript の型
 
 ## タプル型

@@ -1,3 +1,7 @@
+---
+title: "A Tour Of Go の  More types"
+tags: ["Go"]
+---
 # A Tour Of Go の More types のメモ
 リンク : https://go-tour-jp.appspot.com/moretypes
 

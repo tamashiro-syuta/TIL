@@ -1,3 +1,8 @@
+---
+title: "activerecord-importの`on_duplicate_key_update`オプションについて"
+tags: ["Rails"]
+---
+
 # `on_duplicate_key_update`オプションについて
 毎度毎度、忘れてしまうのでメモ。(戒め)
 

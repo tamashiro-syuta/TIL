@@ -1,3 +1,7 @@
+---
+title: "A Tour Of Go の Flow control statements のメモ"
+tags: ["Go"]
+---
 # A Tour Of Go の Flow control statements のメモ
 リンク : https://go-tour-jp.appspot.com/flowcontrol
 

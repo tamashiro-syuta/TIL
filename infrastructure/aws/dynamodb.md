@@ -1,4 +1,8 @@
-# Dynamo db 概要
+---
+title: "DynamoDB 概要"
+tags: ["AWS", "DynamoDB"]
+---
+# DynamoDB 概要
 
 - [公式のハンズオン資料](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/getting-started-step-1.html) を触りながらのメモ
 

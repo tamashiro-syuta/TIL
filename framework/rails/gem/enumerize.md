@@ -1,3 +1,7 @@
+---
+title: "enumerizeのメモ"
+tags: ["Rails"]
+---
 # enumerize
 
 ## `.text`メソッド

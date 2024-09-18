@@ -1,3 +1,7 @@
+---
+title: "A Tour Of Go の  Methods and Interfaces"
+tags: ["Go"]
+---
 # A Tour Of Go の Methods and Interfaces のメモ
 リンク : https://go-tour-jp.appspot.com/methods
 

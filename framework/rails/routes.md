@@ -1,3 +1,8 @@
+---
+title: "ルーティング周りのTips"
+tags: ["Rails", "Tips"]
+---
+
 # ルーティング周りのTips
 
 ## formatの指定
