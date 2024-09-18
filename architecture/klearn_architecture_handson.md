@@ -80,6 +80,7 @@ tag: "アーキテクチャ"
   - そうすることで、層単位で見た時に外側の層が内側の層に依存するようになる
 
 ## クリーンアーキテクチャの各層の概要
+![klean_architecture](https://blog.tai2.net/images/CleanArchitecture.jpg)
 
 ### 🟨 エンタープライズビジネスルール層(図の黄色)
 - エンティティ
