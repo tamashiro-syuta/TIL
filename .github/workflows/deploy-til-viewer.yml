@@ -6,31 +6,27 @@ on:
 jobs:
   upload-to-s3:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-1  # 適切なAWSリージョンに置き換える
-
+          aws-region: ap-northeast-1
       - name: Upload images to S3
         run: |
           aws s3 sync ./image s3://til-viewer-images --exact-timestamps
-        # aws s3 cp /Users/tamashiro_syuta/Desktop/test/ s3://til-viewer-images/test/ --profile til --recursive
-
-        # run-repository-dispatch:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: dispatch til-viewer deploy workflow
-  #       run: |
-  #         curl \
-  #           -X POST \
-  #           -H "Authorization: token ${{ secrets.GH_API_ACCESS_TOKEN }}" \
-  #           -H "Accept: application/vnd.github.v3+json" \
-  #           https://api.github.com/repos/tamashiro-syuta/til-viewer/dispatches \
-  #           -d '{"event_type":"update-til"}'
+  run-repository-dispatch:
+    needs: upload-to-s3
+    runs-on: ubuntu-latest
+    steps:
+      - name: dispatch til-viewer deploy workflow
+        run: |
+          curl \
+            -X POST \
+            -H "Authorization: token ${{ secrets.GH_API_ACCESS_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/tamashiro-syuta/til-viewer/dispatches \
+            -d '{"event_type":"update-til"}'
