@@ -109,7 +109,7 @@ const result2 = add("hello", "world"); // helloworld
 
 - TypeScript において、すべての型を抽象化すると (言い換えるとすべての型のスーパータイプになるのは) unknown 型になる
 - 逆に、すべての型のサブタイプとなるのは never 型
-  ![TypeScriptにおける型システムの階層構造](https://knmts.com/images/2021-12-13_1.png)
+  ![TypeScriptにおける型システムの階層構造](/image/lang/TypeScript/type/typescript_types_pyramid.png)
 - unknown 型は、どの型でも代入できる = すべての型のスーパータイプ
 - never 型には実際の値が存在せず、どの型でもない = どの型のサブタイプでもない
 
