@@ -90,8 +90,6 @@ tags: ["フロントエンド", "テスト", "書籍"]
 - 実際のテスト環境に近づけるほど、コストや工数がかかる(運用コストも)
     - ex) E2Eテストをするには、実行環境、ダミーデータが保存してあるDBを用意など、、、
 
-    ![IMG_1982.heic](https://gihyo.jp/assets/images/dev/serial/01/savanna-letter/0005/02.jpg)
-
 - **このようなテストとコストの最適化をどのように設計するかがテスト戦略モデル**
 
 ## アイスクリームコーン型
@@ -103,7 +101,7 @@ tags: ["フロントエンド", "テスト", "書籍"]
 - 開発体験も良くない
     - 開発体験をよくするのもテストの役割
 
-![アイスクリームコーン型](https://gihyo.jp/assets/images/dev/serial/01/savanna-letter/0005/02.jpg)
+![アイスクリームコーン型](/image/frontend/test/testing_techniques_and_overview/icecream.jpg)
 
 ## テストピラミッド型
 
@@ -113,7 +111,7 @@ tags: ["フロントエンド", "テスト", "書籍"]
 - 実行時間も短いため、開発体験も良い
 - **※ ただし、忠実性は低い**
 
-![テストピラミッド型](https://gihyo.jp/assets/images/dev/serial/01/savanna-letter/0005/01.jpg)
+![テストピラミッド型](/image/frontend/test/testing_techniques_and_overview/test_pyramid.jpg)
 
 ## テスティングトロフィー型
 
@@ -124,7 +122,7 @@ tags: ["フロントエンド", "テスト", "書籍"]
 - フロントエンドに寄せたテスト戦略
 - Testing Libraryの開発者が提唱
 
-![テスティングトロフィー](https://miro.medium.com/v2/resize:fit:1248/format:webp/0*4Ug2VfpQAwyUCyLz.png)
+![テスティングトロフィー](/image/frontend/test/testing_techniques_and_overview/testing_trophy.png)
 
 ### 【テスト戦略モデル】
 
