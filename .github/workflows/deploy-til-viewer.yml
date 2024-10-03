@@ -9,6 +9,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Image Resizer Action
+        uses: sharadcodes/img-resizer@v1.1
+        with:
+          image-folder: './image'
+          new-resolution: '600x300'
+          output-folder: "./resized_image"
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -17,7 +23,7 @@ jobs:
           aws-region: ap-northeast-1
       - name: Upload images to S3
         run: |
-          aws s3 sync ./image s3://til-viewer-images --exact-timestamps
+          aws s3 sync ./resized_image s3://til-viewer-images --exact-timestamps
   run-repository-dispatch:
     needs: upload-to-s3
     runs-on: ubuntu-latest
