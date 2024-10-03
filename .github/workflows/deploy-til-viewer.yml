@@ -12,9 +12,9 @@ jobs:
       - name: Image Resizer Action
         uses: sharadcodes/img-resizer@v1.1
         with:
-          image-folder: './image'
+          image-folder: 'image'
           new-resolution: '600x300'
-          output-folder: "./resized_image"
+          output-folder: "resized_image"
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
         with:
