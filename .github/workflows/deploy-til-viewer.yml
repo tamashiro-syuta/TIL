@@ -15,8 +15,12 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y imagemagick
       - name: Resize images
         run: |
-          for file in ./image/*.{jpeg,jpg,png}; do
-            convert "$file" -resize 60% "./resized_image/$(basename "$file")"
+          for ext in jpg jpeg png; do
+            for file in ./image/*.$ext; do
+              if [ -f "$file" ]; then
+                convert "$file" -resize 60% "./resized_image/$(basename "$file")"
+              fi
+            done
           done
   upload-to-s3:
     needs: resize-images
