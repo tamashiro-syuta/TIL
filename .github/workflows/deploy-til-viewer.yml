@@ -19,6 +19,7 @@ jobs:
             convert "$file" -resize 60% "./resized_image/$(basename "$file")"
           done
   upload-to-s3:
+    needs: resize-images
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
