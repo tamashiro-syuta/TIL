@@ -15,13 +15,12 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y imagemagick
       - name: Resize images
         run: |
-          for ext in jpg jpeg png; do
-            for file in ./image/*.$ext; do
-              if [ -f "$file" ]; then
-                convert "$file" -resize 60% "./resized_image/$(basename "$file")"
-              fi
+          find ./image -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) -exec sh -c '
+            for img; do
+              mkdir -p "./resized_image/$(dirname "$img" | sed "s|^./image||")"
+              convert "$img" -resize 60% "./resized_image/${img#./image/}"
             done
-          done
+          ' sh {} +
       - name: check resized images
         run: ls -l ./resized_image
       - name: Upload resized images as artifact
