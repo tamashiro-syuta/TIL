@@ -4,19 +4,25 @@ on:
     branches:
       - main
 jobs:
-  upload-to-s3:
+  resize-images:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Create resized_image directory
         run: mkdir -p ./resized_image
-      - name: Image Resizer Action
-        uses: sharadcodes/img-resizer@v1.1
-        with:
-          image-folder: './image'
-          new-resolution: '600x300'
-          output-folder: "./resized_image"
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
+      - name: Resize images
+        run: |
+          for file in ./image/*.{jpeg,jpg,png}; do
+            convert "$file" -resize 60% "./resized_image/$(basename "$file")"
+          done
+  upload-to-s3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -26,15 +32,15 @@ jobs:
       - name: Upload images to S3
         run: |
           aws s3 sync ./resized_image s3://til-viewer-images --exact-timestamps
-  run-repository-dispatch:
-    needs: upload-to-s3
-    runs-on: ubuntu-latest
-    steps:
-      - name: dispatch til-viewer deploy workflow
-        run: |
-          curl \
-            -X POST \
-            -H "Authorization: token ${{ secrets.GH_API_ACCESS_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/tamashiro-syuta/til-viewer/dispatches \
-            -d '{"event_type":"update-til"}'
+  # run-repository-dispatch:
+  #   needs: upload-to-s3
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: dispatch til-viewer deploy workflow
+  #       run: |
+  #         curl \
+  #           -X POST \
+  #           -H "Authorization: token ${{ secrets.GH_API_ACCESS_TOKEN }}" \
+  #           -H "Accept: application/vnd.github.v3+json" \
+  #           https://api.github.com/repos/tamashiro-syuta/til-viewer/dispatches \
+  #           -d '{"event_type":"update-til"}'
