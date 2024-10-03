@@ -22,12 +22,20 @@ jobs:
               fi
             done
           done
+      - name: Upload resized images as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: resized_images
+          path: ./resized_image
   upload-to-s3:
     needs: resize-images
     runs-on: ubuntu-latest
     steps:
-      - name: check current directory
-        run: ls -la
+      - name: Download resized images artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: resized_images
+          path: ./resized_image
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v2
         with:
