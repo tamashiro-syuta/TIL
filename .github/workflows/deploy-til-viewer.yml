@@ -22,6 +22,8 @@ jobs:
               fi
             done
           done
+      - name: check resized images
+        run: ls -l ./resized_image
       - name: Upload resized images as artifact
         uses: actions/upload-artifact@v3
         with:
