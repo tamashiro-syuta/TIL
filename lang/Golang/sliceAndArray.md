@@ -194,6 +194,28 @@ func printSlice(s []int) {
 // len=11 cap=12 [0 0 0 0 0 1 1 1 1 1 1]
 ```
 
+# Tips
+- バッファとしても使えるよ
+	- メモリ効率の良い(不要なメモリの割り当てを行わない)処理の実装例
+	- Goにはガベージコレクションはあるけど、いらずらにメモリを使えっても良いわけではない。
+	```go
+	file, err += os.Open(hoge)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	data := make([]byte, 100) // 100バイトのバッファを作成
+	for { // 明示的なreturnまで無限ループ
+		count, err += file.Read(data) // ファイルの読み込み
+		if err != nil {
+			return err
+		}
+		if count == 0 {
+			return nil
+		}
+		process(data) // 読み込んだデータの処理
+	}
+	```
 ***
 
 # 配列 の基本
