@@ -90,6 +90,7 @@ func main() {
   - Rubyでいう`freeze`みたいなものはない
 - 定数には「型なし」と「型付き」の2種類がある
   - 型なし : `const x = 10`
+    - `untyped`とも呼ばれる
     - この時、`x`は型なしなので、以下のように異なる型に代入できる
       ```go
       const x = 10
@@ -109,6 +110,25 @@ func main() {
   - コンパイル時に未使用の定数は、削除されバイナリファイルには含まれなくなる
 - 定数は文字(character)、文字列(string)、boolean、数値(numeric)のみで使える
 - 定数は := を使って宣言できない
+
+## Goでの`const`の使い分け
+- Goでは、以下のような場合に`const`を使用することが一般的
+  - パッケージレベルで再利用される値
+  - 複数の場所で使用される重要な定数（例：ステータスコード、設定値など）
+  - 数値の型を明示的に制御したい場合
+  - iotaを使用する列挙型の定義
+- 一方で、以下のような場合は変数を使用することが推奨される
+  - 関数スコープ内でのみ使用される文字列
+  - エラーメッセージのようなフォーマット文字列
+  - 1回しか使用しない値
+
+```go
+// Not Good
+const errNoTargetCustomers = "no target customers found, targetCustomerIDs: %v, targetYearHalf: %s"
+
+// GooD
+msg := "no target customers found, targetCustomerIDs: %v, targetYearHalf: %s"
+```
 
 ```go
 package main
